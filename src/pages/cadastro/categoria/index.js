@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
@@ -29,6 +29,17 @@ function CadastroCategoria() {
       evento.target.value,
     );
   }
+
+  useEffect(() => {
+    const URL = 'http://localhost:8080/categorias';
+    fetch(URL)
+      .then(async (respostaDoServidor) => {
+        const resposta = await respostaDoServidor.json();
+        setCategorias([
+          ...resposta,
+        ]);
+      });
+  }, []);
 
   return (
     <PageDefault>
@@ -77,6 +88,12 @@ function CadastroCategoria() {
           Cadastrar
         </Button>
       </form>
+
+      {categorias.length === 0 && (
+      <div>
+        Carregando...
+      </div>
+      ) }
 
       <ul>
         {categorias.map((categoria) => (
